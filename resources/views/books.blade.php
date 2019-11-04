@@ -178,6 +178,21 @@
             location.reload()
         }, 500);
     }
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    let images = document.querySelectorAll(".images")
+    images.forEach(image => {
+        console.log("hello")
+        image.src = image.src.replace('*ID*', getRandomInt(1, 1000))
+    });
+
+    function getRandomImage() {
+        return `https://picsum.photos/id/${getRandomInt(1,1000)}/300/250`
+    }
 </script>
 
 <body>
@@ -191,7 +206,7 @@
                     <h4>{{ $book->author_last }}, </h4>
                     <h4>&nbsp{{' ' . $book->author_first }}</h4>
                 </div>
-                <img src="https://picsum.photos/300/250" />
+                <img class='images' src="https://picsum.photos/id/{{ $book->id }}/300/250" alt="https://picsum.photos/300/250" />
                 <p>{{ $book->publisher }}</p>
                 <button onclick="addToList({{ json_encode($book) }} )">
                     + Add to List
