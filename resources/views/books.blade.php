@@ -225,7 +225,7 @@
                     <h4>{{ $book->author_last }}, </h4>
                     <h4>&nbsp{{' ' . $book->author_first }}</h4>
                 </div>
-                <img src="https://picsum.photos/300/300" />
+                <img src="https://picsum.photos/id/{{ $book->id }}/300/250" alt="https://picsum.photos/300/250" />
                 <button onclick="removeFromList({{ json_encode($book) }} )">
                     + remove from list
                 </button>
