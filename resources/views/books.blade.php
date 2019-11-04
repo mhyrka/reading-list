@@ -116,6 +116,11 @@
         #my-list::-webkit-scrollbar {
             width: 0 !important
         }
+
+        button {
+            border: 2px solid #ff6600;
+            border-radius: 4px;
+        }
     </style>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -137,17 +142,46 @@
                 data: data,
                 success: function(response) {
                     console.log(response);
+                    location.reload()
+                }
+            });
+        });
+        // Terrible way to do this...
+        setTimeout(() => {
+            location.reload()
+        }, 500);
+
+    }
+
+    function removeFromList(data) {
+
+        $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                method: 'POST',
+                dataType: 'Application/JSON',
+                url: "{{ url('/api/books/remove-book') }}",
+                data: data,
+                success: function(response) {
+                    console.log(response);
 
                 }
             });
         });
         // Terrible way to do this...
-        location.reload()
+        setTimeout(() => {
+            location.reload()
+        }, 500);
     }
 </script>
 
 <body>
-    <h1>GET YA BOOKS HERE</h1>
+    <h1>ALL BOOKS</h1>
     <div id="main">
         <div id="books-section">
             @foreach ($books as $book)
@@ -157,7 +191,8 @@
                     <h4>{{ $book->author_last }}, </h4>
                     <h4>&nbsp{{' ' . $book->author_first }}</h4>
                 </div>
-                <img src="https://picsum.photos/300/300" />
+                <img src="https://picsum.photos/300/250" />
+                <p>{{ $book->publisher }}</p>
                 <button onclick="addToList({{ json_encode($book) }} )">
                     + Add to List
                 </button>
@@ -176,7 +211,7 @@
                     <h4>&nbsp{{' ' . $book->author_first }}</h4>
                 </div>
                 <img src="https://picsum.photos/300/300" />
-                <button onclick="addToList({{ json_encode($book) }} )">
+                <button onclick="removeFromList({{ json_encode($book) }} )">
                     + remove from list
                 </button>
 

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\books;
 use App\MyBooks;
+use Dotenv\Regex\Success;
 
 class BooksController extends Controller
 {
@@ -30,19 +31,23 @@ class BooksController extends Controller
 
     public function addBook(Request $request)
     {
-        MyBooks::create(['book_id' => "$request->id"]);
+        $my_book = MyBooks::create(['book_id' => "$request->id"]);
         $book_ids = DB::table('my_books')
             ->select('book_id')
             ->pluck('book_id')
             ->toArray();
-        $my_books = DB::table('books')
-            ->select('id', 'title', 'author_first', 'author_last', 'publisher', 'isbn')
-            ->whereIn('id', $book_ids)
-            ->get();
+        $this->getBooks();
+        return response($my_book, 200);
+    }
 
-        // // return json_encode($my_books, JSON_PRETTY_PRINT);
-        // return view('readinglist')->with('my_books', $my_books);
-        // return $book_ids;
-        return $this->getBooks();
+    public function removeBook(Request $request)
+    {
+        DB::table('my_books')
+            ->select()
+            ->where('book_id', '=', $request->id)
+            ->delete();
+        // $book->delete();
+        $this->getBooks();
+        // return $request->id;
     }
 }
