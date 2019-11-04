@@ -19,3 +19,4 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 Route::get('/books', 'BooksController@getBooks');
+Route::post('/books/add-book', 'BooksController@addBook');
